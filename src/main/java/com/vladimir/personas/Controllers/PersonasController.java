@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vladimir.personas.repository.PersonasRepository;
+
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import com.vladimir.personas.model.PersonasModel;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,6 +52,11 @@ public class PersonasController {
             })
             .orElse(ResponseEntity.notFound().build());
        
+    }
+    //Metodo para eliminar una persona en la base de datos
+    @DeleteMapping("/eliminar-personas/{id}")
+    public void eliminarpersonas(@PathVariable Long id) {
+        personasRepository.deleteById(id);
     }
   }
 
