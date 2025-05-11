@@ -30,6 +30,15 @@ public class PersonasController {
     public List <PersonasModel> TraerPersonas() {
         return personasRepository.findAll();
     }
+//Metodo get para traer a una persona de la base de datos
+    @GetMapping("/traer-persona/{id}")
+    public ResponseEntity<PersonasModel> TraerPersona(@PathVariable Long id) {
+        return personasRepository.findById(id)
+                .map(persona -> ResponseEntity.ok(persona))
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+
     //Metodo para insertar una persona en la base de datos 
     @PostMapping("/insertar-personas")
     public PersonasModel insertarPersonas(@RequestBody PersonasModel persona) {
