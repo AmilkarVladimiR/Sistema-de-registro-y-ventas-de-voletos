@@ -3,6 +3,7 @@ package com.vladimir.personas.Controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,6 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.vladimir.personas.model.PersonasModel;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
 
 
 @RestController
@@ -26,9 +30,26 @@ public class PersonasController {
     }
     //Metodo para insertar una persona en la base de datos 
     @PostMapping("/insertar-personas")
-    public PersonasModel insertarPersona(@RequestBody PersonasModel persona) {
+    public PersonasModel insertarPersonas(@RequestBody PersonasModel persona) {
         return personasRepository.save(persona);
        
     }
+    //Metodo para  editar una persona en la base de datos
+    @PutMapping("/editar-personas/{id}")
+   public ResponseEntity<PersonasModel> actualizarPersonas(@PathVariable Long id, @RequestBody PersonasModel persona) {
+    return personasRepository.findById(id).map(existingPersona -> {
+                existingPersona.setNombre(persona.getNombre());
+                existingPersona.setApellido(persona.getApellido());
+                existingPersona.setEmail(persona.getEmail());
+                existingPersona.setNumeroControl(persona.getNumeroControl());
+                existingPersona.setTelefono(persona.getTelefono());
+                existingPersona.setCarrera(persona.getCarrera());
+               existingPersona.setImagenURL(persona.getImagenURL());
+                PersonasModel updatedPersona = personasRepository.save(existingPersona);
+                return ResponseEntity.ok(updatedPersona);
+            })
+            .orElse(ResponseEntity.notFound().build());
+       
+    }
+  }
 
-}
