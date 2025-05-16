@@ -1,9 +1,9 @@
 package com.vladimir.personas.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @Entity
 public class PersonasModel {
@@ -12,19 +12,18 @@ public class PersonasModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String numeroControl;
+    private String numero;         // Número identificador (puede ser número de control)
     private String nombre;
     private String apellido;
-    private String telefono;
-    private String email;
-    private String carrera;
-    private String imagenURL;
+    private String origen;
+    private String destino;
+    private double precio;
+    private int numeroAsiento;
 
-    // 🔧 Constructor público sin argumentos
     public PersonasModel() {
     }
 
-    // Getters y setters
+    // Getters y Setters
 
     public Long getId() {
         return id;
@@ -34,12 +33,12 @@ public class PersonasModel {
         this.id = id;
     }
 
-    public String getNumeroControl() {
-        return numeroControl;
+    public String getNumero() {
+        return numero;
     }
 
-    public void setNumeroControl(String numeroControl) {
-        this.numeroControl = numeroControl;
+    public void setNumero(String numero) {
+        this.numero = numero;
     }
 
     public String getNombre() {
@@ -58,35 +57,35 @@ public class PersonasModel {
         this.apellido = apellido;
     }
 
-    public String getTelefono() {
-        return telefono;
+    public String getOrigen() {
+        return origen;
     }
 
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
+    public void setOrigen(String origen) {
+        this.origen = origen;
     }
 
-    public String getEmail() {
-        return email;
+    public String getDestino() {
+        return destino;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setDestino(String destino) {
+        this.destino = destino;
     }
 
-    public String getCarrera() {
-        return carrera;
+    public double getPrecio() {
+        return precio;
     }
 
-    public void setCarrera(String carrera) {
-        this.carrera = carrera;
+    public void setPrecio(double precio) {
+        this.precio = precio;
     }
 
-    public String getImagenURL() {
-        return imagenURL;
+    public int getNumeroAsiento() {
+        return numeroAsiento;
     }
 
-    public void setImagenURL(String imagenURL) {
-        this.imagenURL = imagenURL;
+    public void setNumeroAsiento(int numeroAsiento) {
+        this.numeroAsiento = numeroAsiento;
     }
 }

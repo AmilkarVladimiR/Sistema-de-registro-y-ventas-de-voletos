@@ -4,68 +4,62 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.*;
 import com.vladimir.personas.repository.PersonasRepository;
-
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import com.vladimir.personas.model.PersonasModel;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-
-
 
 @RestController
 @RequestMapping("/personas")
+@CrossOrigin(origins = "*")
 public class PersonasController {
-      //Metodo get para traer a todas las personas de la base de datos
+
     @Autowired
     private PersonasRepository personasRepository;
 
     @GetMapping("/traer-personas")
-    public List <PersonasModel> TraerPersonas() {
+    public List<PersonasModel> TraerPersonas() {
         return personasRepository.findAll();
     }
-//Metodo get para traer a una persona de la base de datos
+
     @GetMapping("/traer-persona/{id}")
     public ResponseEntity<PersonasModel> TraerPersona(@PathVariable Long id) {
         return personasRepository.findById(id)
-                .map(persona -> ResponseEntity.ok(persona))
+                .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
-
-    //Metodo para insertar una persona en la base de datos 
+    // 🚫 No insertar si el asiento ya está ocupado
     @PostMapping("/insertar-personas")
-    public PersonasModel insertarPersonas(@RequestBody PersonasModel persona) {
-        return personasRepository.save(persona);
-       
+    public ResponseEntity<?> insertarPersonas(@RequestBody PersonasModel persona) {
+        boolean asientoOcupado = personasRepository.findAll().stream()
+              .anyMatch(p -> p.getNumeroAsiento() == persona.getNumeroAsiento());
+ 
+
+        if (asientoOcupado) {
+            return ResponseEntity.badRequest().body("El número de asiento ya está ocupado.");
+        }
+
+        PersonasModel personaGuardada = personasRepository.save(persona);
+        return ResponseEntity.ok(personaGuardada);
     }
-    //Metodo para  editar una persona en la base de datos
+
     @PutMapping("/editar-personas/{id}")
-   public ResponseEntity<PersonasModel> actualizarPersonas(@PathVariable Long id, @RequestBody PersonasModel persona) {
-    return personasRepository.findById(id).map(existingPersona -> {
-                existingPersona.setNombre(persona.getNombre());
-                existingPersona.setApellido(persona.getApellido());
-                existingPersona.setEmail(persona.getEmail());
-                existingPersona.setNumeroControl(persona.getNumeroControl());
-                existingPersona.setTelefono(persona.getTelefono());
-                existingPersona.setCarrera(persona.getCarrera());
-               existingPersona.setImagenURL(persona.getImagenURL());
-                PersonasModel updatedPersona = personasRepository.save(existingPersona);
-                return ResponseEntity.ok(updatedPersona);
-            })
-            .orElse(ResponseEntity.notFound().build());
-       
+    public ResponseEntity<PersonasModel> actualizarPersonas(@PathVariable Long id, @RequestBody PersonasModel persona) {
+        return personasRepository.findById(id).map(existingPersona -> {
+            existingPersona.setNumero(persona.getNumero());
+            existingPersona.setNombre(persona.getNombre());
+            existingPersona.setApellido(persona.getApellido());
+            existingPersona.setOrigen(persona.getOrigen());
+            existingPersona.setDestino(persona.getDestino());
+            existingPersona.setPrecio(persona.getPrecio());
+            existingPersona.setNumeroAsiento(persona.getNumeroAsiento());
+            PersonasModel updatedPersona = personasRepository.save(existingPersona);
+            return ResponseEntity.ok(updatedPersona);
+        }).orElse(ResponseEntity.notFound().build());
     }
-    //Metodo para eliminar una persona en la base de datos
+
     @DeleteMapping("/eliminar-personas/{id}")
     public void eliminarpersonas(@PathVariable Long id) {
         personasRepository.deleteById(id);
     }
-  }
-
+}
