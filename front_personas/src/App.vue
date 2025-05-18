@@ -118,30 +118,24 @@ onMounted(cargarPersonas);
 
 const initMapaRuta = () => {
   const map = L.map("map").setView([17.2686, -97.6801], 6);
-
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: '&copy; OpenStreetMap contributors',
   }).addTo(map);
 
   const tlaxiaco = [17.2686, -97.6801];
   const cdmx = [19.4326, -99.1332];
-
   L.marker(tlaxiaco).addTo(map).bindPopup("Tlaxiaco").openPopup();
   L.marker(cdmx).addTo(map).bindPopup("CDMX");
-
   L.polyline([tlaxiaco, cdmx], { color: "blue", weight: 4 }).addTo(map);
-
   // Nueva línea: CDMX a Puebla
   const puebla = [19.0413, -98.2062];
   L.marker(puebla).addTo(map).bindPopup("Puebla");
   L.polyline([cdmx, puebla], { color: "green", weight: 4 }).addTo(map);
-
   // Nueva línea: Puebla a Oaxaca
   const oaxaca = [17.0732, -96.7266];
   L.marker(oaxaca).addTo(map).bindPopup("Oaxaca");
   L.polyline([puebla, oaxaca], { color: "purple", weight: 4 }).addTo(map);
 };
-
 onMounted(() => {
   cargarPersonas();
   initMapaRuta();
@@ -163,7 +157,7 @@ onMounted(() => {
 
       <div class="row">
 
-<!-- Selección de Ruta con Estilos Mejorados -->
+<!-- Selección de Ruta  -->
 <div class="col-12 mb-4">
   <div class="card border-0 shadow-sm p-3 bg-light">
     <h3 class="text-primary mb-3 fw-bold text-center">Seleccionar Ruta</h3>
@@ -286,34 +280,28 @@ onMounted(() => {
 body {
   font-family: 'Segoe UI', sans-serif;
 }
-
 .gradient-bg {
   background: linear-gradient(to bottom right, #6a801e, #ff4d4d);
   border-radius: 15px;
 }
-
 .gradient-btn {
   background: linear-gradient(45deg, #c8a300, #1e88e5);
   color: white;
   border: none;
   font-weight: bold;
 }
-
 .gradient-btn:hover {
   opacity: 0.9;
 }
-
 .text-title {
   color: #070707;
   font-weight: bold;
   font-size: 2rem;
 }
-
 .text-subtitle {
   color: #0d0e0d;
   font-weight: 600;
 }
-
 .card-form {
   background-color: rgba(255, 255, 255, 0.9);
   border-left: 5px solid #ff4d4d;
